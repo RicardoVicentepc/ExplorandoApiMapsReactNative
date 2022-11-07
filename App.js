@@ -1,6 +1,6 @@
 import * as React from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 
 
 export default function App() {
@@ -22,8 +22,8 @@ const meuBarraco =
     <View style={styles.container}>
       <MapView style={styles.map}>
       <Marker coordinate={casaDaJulia}>
-          <View style={{backgroundColor: "red", padding: 10, borderRadius:100}}>
-          <Text>id1</Text>
+          <Image source={require('./assets/icon.png')} style={{width:80,height:10}}/>
+           <View style={{backgroundColor: "purple"}}>
         </View>
       </Marker>
       <Marker coordinate={meuBarraco}>
