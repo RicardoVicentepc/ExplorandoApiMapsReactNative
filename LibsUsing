@@ -1,0 +1,7 @@
+-- npm install react-native-geolocation-service // USADA PARA CONSEGUIR A GEOLOCATION DO SMARTPHONE DESEJADO.
+-- npm install --save react-native-permissions // USADA PARA PEDIR AUTORIZAÇÃO DO DISPOSITIVO PARA UTILIZAR
+A LOCALAIZAÇÃO EM TEMPO REAL.
+
+npx expo install expo-locations
+Unable to resolve "CustomMarker" from "App.js"
+
