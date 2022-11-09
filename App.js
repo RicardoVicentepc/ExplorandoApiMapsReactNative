@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, Image} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, Image, FlatList} from 'react-native';
 // import Geolocation from 'react-native-geolocation-service';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { ActivityIndicator } from 'react-native-web';
 export default function App() {
 const casaDaJulia = 
 {
@@ -14,10 +15,28 @@ const casaDaJulia =
   longitudeDelta: 0.01,
 }  
 
+const [isLoading, setLoading] = useState(true);
+const [data, setData] = useState(true);
+
+const getCliente = async () => {
+   try {
+      const response = await fetch('http://localhost:80/backendmaps/cliente-json.php');
+      const json = await response.json();
+      setData(json.cepCliente);
+   } catch (error) {
+      console.error(error)
+   } finally {
+      setLoading(false);
+   }
+}
+ 
 
 const [origin, setOrigin] = useState(null);
 const [destination, setDestination] = useState(null);
 
+useEffect(() => {
+   getCliente();
+}, []);
 
 useEffect( ()=>{
    (async function(){
@@ -42,7 +61,7 @@ useEffect( ()=>{
 
   return (
     <View style={styles.container}>
-   <MapView
+   {/* <MapView
          style={styles.map}
          initialRegion=
          {origin}
@@ -50,10 +69,18 @@ useEffect( ()=>{
          zoomEnabled={true}
          loadingEnabled={true}
       >
-
-
          <Marker coordinate={casaDaJulia}/>
-      </MapView>
+      </MapView> */}
+
+      {isLoading ? <ActivityIndicator/> : (
+         <FlatList
+         data={data}
+         keyExtractor={({idCliente}, index) => idCliente}
+         renderItem={({ item }) => (
+            <Text>{item.idCliente}, {item.cepCliente}</Text>
+         )}
+         />
+      )}
     </View>
   );
 }
