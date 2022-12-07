@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Image, FlatList,RefreshControl,ScrollView} from 'react-native';
 import { Button, TextInput} from 'react-native';
+import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 
 // import Geolocation from 'react-native-geolocation-service';
 import * as Location from 'expo-location';
@@ -21,7 +22,7 @@ export default function App() {
      longitudeDelta: 0.01,
    } 
    
-   
+   const LeftContent = props => <Avatar.Icon {...props} icon="human" />
    
    function HomeScreen() {
       
@@ -35,7 +36,7 @@ export default function App() {
      const verificar = () => {
        const valores = turma;
    
-       fetch('http://192.168.1.7:80/ProjetoRelatorio/ProjetoRelatorio/relatorio-json-insert.php', {
+       fetch('http://192.168.1.9:80/ProjetoRelatorio/ProjetoRelatorio/relatorio-json-insert.php', {
          method: 'post',
          header: {
            'Accept': 'application/json',
@@ -160,7 +161,7 @@ function Mapa() {
  
    const getRelatorios = async () => {
       try {
-       const response = await fetch('http://192.168.1.7:80/ProjetoRelatorio/ProjetoRelatorio/relatorio-json.php');
+       const response = await fetch('http://192.168.1.9:80/ProjetoRelatorio/ProjetoRelatorio/relatorio-json.php');
        const json = await response.json();
        setData(json.relatorios);
      } catch (error) {
@@ -174,21 +175,28 @@ function Mapa() {
      getRelatorios();
    }, []);
    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.container}>
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
         >
-        <View style={{ flex: 1, padding: 24 }}>
+        <View>
      {isLoading ? <ActivityIndicator/> : (
         <FlatList
          data={data}
          keyExtractor={({ idRelatorio }, index) => idRelatorio}
          renderItem={({ item }) => (
-           <Text>id:{item.idRelatorio}  Aluno: {item.aluno}, Comentario:{item.comentario}</Text>
-         )}
-       >
-
+           //  <Text>id:{item.idRelatorio}  Aluno: {item.aluno}, Comentario:{item.comentario}</Text>
+           <Card style={{width:'95%', marginBottom:25}}>
+            {/* <Card.Title title={'id:'+ item.idRelatorio} style={{width:'70%',margin:5, marginBottom:10}} subtitle={item.comentario} left={LeftContent} /> */}
+          <View style={{display:'flex'}}>
+            <Title style={{marginLeft:10,fontSize:25, fontFamily:'monospace'}}>{item.aluno}</Title>
+            <Title style={{marginLeft:10,fontFamily:'monospace'}}><Title style={{fontSize:15, fontWeight:'900', borderColor:'black'}}>Componente: </Title>{item.componente}</Title>
+            <Title style={{marginLeft:10,fontFamily:'monospace'}}><Title style={{fontSize:15, fontWeight:'900', borderColor:'black'}}>Comentario: </Title>{item.comentario}</Title>
+            </View>
+           </Card>
+           )}
+           >
        </FlatList>
 
 )}
@@ -203,7 +211,7 @@ const Tab = createBottomTabNavigator();
    <Tab.Navigator>
      <Tab.Screen name="Relatorio" component={HomeScreen} />
      <Tab.Screen name="Maps" component={Mapa} />
-     <Tab.Screen name="Settings" component={SettingsScreen} />
+     <Tab.Screen name="Avaliações" component={SettingsScreen} />
    </Tab.Navigator>
  </NavigationContainer>
   );
